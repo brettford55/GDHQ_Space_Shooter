@@ -7,30 +7,22 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     [SerializeField]
     private float _minSpeed = 3, _currentSpeed,_speedBoostMultiplyer, _acceleration, _maxSpeed;
-
-
     [SerializeField]
     private float _fireRate = 0.5f, _canFire;
-
     [SerializeField]
     private bool _tripleShotActive = false, _speedBoostActive = false, _shieldActive = false;
-
     [SerializeField]
     private GameObject _laserPrefab, _tripleShotPrefab, _shieldVisualizer;
-
-
     [SerializeField]
     private GameObject _rightTailDmg, _leftTailDmg;
-
     [SerializeField]
     private AudioSource _laserSFX;
-
-
     [SerializeField]
-    private int _score, _lives;
+    private int _score, _lives, _shieldLives;
 
     private SpawnManager _spawnManager;
     private UIManager _UIManager;
+    private SpriteRenderer _shieldRenderer;
 
     void Start()
     {
@@ -51,6 +43,12 @@ public class Player : MonoBehaviour
         if (_laserSFX == null)
         {
             Debug.LogError("Laser SFX is Null");
+        }
+      
+        _shieldRenderer = _shieldVisualizer.GetComponent<SpriteRenderer>();
+        if (_shieldRenderer == null)
+        {
+            Debug.LogError("Shield Color is Null");
         }
 
         _currentSpeed = _minSpeed;
@@ -77,7 +75,6 @@ public class Player : MonoBehaviour
                 break;
         }
     }
-
 
     void ShootLaser()
     {
@@ -157,15 +154,11 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(1f);
     }
 
-    
-
-
     public void LoseLife()
     {
        if(_shieldActive == true)
         {
-            _shieldActive = false;
-            _shieldVisualizer.SetActive(false);
+            ShieldVisualizer();
             return;
         }
 
@@ -180,12 +173,39 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void ShieldVisualizer()
+    {
+        //Color shieldColor = _shieldRenderer.color;
+        switch (_shieldLives)
+        {
+            case 3:
+                //shield is blue
+                _shieldLives -= 1;
+                _shieldRenderer.color = new Color(255,255,255,.5f);
+                // shieldColor.a = .5f;
+
+                break;
+            case 2:
+                _shieldLives -= 1;
+                _shieldRenderer.color = new Color(255, 255, 255, .2f);
+                // shieldColor.a = .2f;
+
+                break;
+            case 1:
+                _shieldLives -= 1;
+                _shieldActive = false;
+                _shieldVisualizer.SetActive(false);
+                _shieldRenderer.color = new Color(255, 255, 255, 1f);
+                //shieldColor.a = 1f;
+                break;
+        }
+    }
+
     public void AddToScore(int points)
     {
         _score += points;
         _UIManager.UpdateScore(_score);
     }
-
 
     public void TripleShotActive()
     {
@@ -196,6 +216,7 @@ public class Player : MonoBehaviour
 
     public void ShieldActiveTrue()
     {
+        _shieldLives = 3;
         _shieldActive = true;
         _shieldVisualizer.SetActive(true);
     }
