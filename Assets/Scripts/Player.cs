@@ -156,6 +156,11 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(1f);
     }
 
+    public void AddAmmo()
+    {
+        _ammo += 3;
+        _UIManager.UpdateAmmo(_ammo);
+    }
     public void LoseLife()
     {
        if(_shieldActive == true)

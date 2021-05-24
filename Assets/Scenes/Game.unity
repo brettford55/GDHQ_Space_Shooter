@@ -453,6 +453,7 @@ MonoBehaviour:
   - {fileID: 3737088380470811279, guid: 28b45747b4749eb4a94751d17a65fcac, type: 3}
   - {fileID: 1826195204864260875, guid: bf2c78592fe08b145ba4a1f2319ab507, type: 3}
   - {fileID: 5797364925032856830, guid: a905c25047481344c814f6428e6b5583, type: 3}
+  - {fileID: 4029650023332648184, guid: 67397ef42faf77c4ba3aa2179b530c19, type: 3}
   _enemySpawnTimer: 5
   _stopSpawning: 0
 --- !u!4 &231627419
@@ -1199,7 +1200,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!61 &1193246615
 BoxCollider2D:
   m_ObjectHideFlags: 0
