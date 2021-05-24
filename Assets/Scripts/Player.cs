@@ -18,7 +18,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     private AudioSource _laserSFX;
     [SerializeField]
-    private int _score, _lives, _shieldLives;
+    private int _score, _lives, _shieldLives, _ammo;
 
     private SpawnManager _spawnManager;
     private UIManager _UIManager;
@@ -78,19 +78,21 @@ public class Player : MonoBehaviour
 
     void ShootLaser()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
+        if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire && _ammo > 0)
         {
             _canFire = Time.time + _fireRate;
             
             if(_tripleShotActive == false)
             {
                 Instantiate(_laserPrefab, transform.position + new Vector3(0, 0.9f, 0), Quaternion.identity);
+                _ammo -= 1;
             }
             else
             {
                 Instantiate(_tripleShotPrefab, transform.position + new Vector3(0, 0.9f, 0), Quaternion.identity);
+                _ammo -= 3;
             }
-
+            _UIManager.UpdateAmmo(_ammo);
             _laserSFX.Play();
         }
     }
