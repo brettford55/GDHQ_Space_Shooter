@@ -161,6 +161,7 @@ public class Player : MonoBehaviour
         _ammo += 3;
         _UIManager.UpdateAmmo(_ammo);
     }
+
     public void LoseLife()
     {
        if(_shieldActive == true)
@@ -182,28 +183,21 @@ public class Player : MonoBehaviour
 
     public void ShieldVisualizer()
     {
-        //Color shieldColor = _shieldRenderer.color;
         switch (_shieldLives)
         {
             case 3:
-                //shield is blue
                 _shieldLives -= 1;
                 _shieldRenderer.color = new Color(255,255,255,.5f);
-                // shieldColor.a = .5f;
-
                 break;
             case 2:
                 _shieldLives -= 1;
                 _shieldRenderer.color = new Color(255, 255, 255, .2f);
-                // shieldColor.a = .2f;
-
                 break;
             case 1:
                 _shieldLives -= 1;
                 _shieldActive = false;
                 _shieldVisualizer.SetActive(false);
                 _shieldRenderer.color = new Color(255, 255, 255, 1f);
-                //shieldColor.a = 1f;
                 break;
         }
     }
