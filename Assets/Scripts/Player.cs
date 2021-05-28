@@ -197,7 +197,6 @@ public class Player : MonoBehaviour
                 _shieldLives -= 1;
                 _shieldActive = false;
                 _shieldVisualizer.SetActive(false);
-                _shieldRenderer.color = new Color(255, 255, 255, 1f);
                 break;
         }
     }
@@ -218,6 +217,7 @@ public class Player : MonoBehaviour
     public void ShieldActiveTrue()
     {
         _shieldLives = 3;
+        _shieldRenderer.color = new Color(255, 255, 255, 1f);
         _shieldActive = true;
         _shieldVisualizer.SetActive(true);
     }
