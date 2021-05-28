@@ -23,6 +23,7 @@ public class Player : MonoBehaviour
     private SpawnManager _spawnManager;
     private UIManager _UIManager;
     private SpriteRenderer _shieldRenderer;
+    private CameraShake _cameraShake;
 
     void Start()
     {
@@ -38,6 +39,13 @@ public class Player : MonoBehaviour
         {
             Debug.LogError("UIManager is Null");
         }
+
+        _cameraShake = GameObject.Find("CM vcam1").GetComponent<CameraShake>();
+        if (_cameraShake == null)
+        {
+            Debug.LogError("Camera Shake is null");
+        }
+        
 
         _laserSFX = _laserSFX.GetComponent<AudioSource>();
         if (_laserSFX == null)
@@ -166,16 +174,19 @@ public class Player : MonoBehaviour
     {
        if(_shieldActive == true)
         {
+            _cameraShake.ShakeCamera( 1f, .2f);
             ShieldVisualizer();
             return;
         }
 
         _lives -= 1;
+        _cameraShake.ShakeCamera(2f, .4f);
         DamageVisualizer();
         _UIManager.UpdateLives(_lives);
 
         if (_lives < 1)
         {
+            _cameraShake.ShakeCamera(3f, .6f);
             _spawnManager.OnPlayerDeath();
             Destroy(this.gameObject);
         }
