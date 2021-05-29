@@ -170,6 +170,16 @@ public class Player : MonoBehaviour
         _UIManager.UpdateAmmo(_ammo);
     }
 
+    public void AddLife()
+    {
+        if(_lives < 3)
+        {
+             _lives += 1;
+            _UIManager.UpdateLives(_lives);
+        }
+    }
+       
+
     public void LoseLife()
     {
        if(_shieldActive == true)

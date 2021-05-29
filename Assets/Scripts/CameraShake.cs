@@ -5,19 +5,14 @@ using Cinemachine;
 
 public class CameraShake : MonoBehaviour
 {
-
-    private CinemachineVirtualCamera cinemachineCam1;
-    private CinemachineBasicMultiChannelPerlin channelPerlinCam1;
-
+    private CinemachineBasicMultiChannelPerlin _noise;
     private float shakeTime;
-    
-    
-    // Start is called before the first frame update
+
     void Awake()
     {
-        cinemachineCam1 = GetComponent<CinemachineVirtualCamera>();
-        channelPerlinCam1 = cinemachineCam1.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
-        if(cinemachineCam1 == null || channelPerlinCam1 == null)
+        _noise = GetComponent<CinemachineVirtualCamera>().
+            GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+        if(_noise == null)
         {
             Debug.LogError("CameraShake is Null");
         }
@@ -30,17 +25,13 @@ public class CameraShake : MonoBehaviour
             shakeTime -= Time.deltaTime;
             if(shakeTime <= 0f)
             {
-                channelPerlinCam1.m_AmplitudeGain = 0f;
+                _noise.m_AmplitudeGain = 0f;
             }
         }
-       
-
     }
-
-
     public void ShakeCamera(float intensity, float time)
     {
-        channelPerlinCam1.m_AmplitudeGain = intensity;
+        _noise.m_AmplitudeGain = intensity;
         shakeTime = time;
     }
 }

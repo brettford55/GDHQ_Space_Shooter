@@ -421,7 +421,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7770419, y: 1}
+    m_SensorSize: {x: 1.7791045, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -572,6 +572,7 @@ MonoBehaviour:
   - {fileID: 1826195204864260875, guid: bf2c78592fe08b145ba4a1f2319ab507, type: 3}
   - {fileID: 5797364925032856830, guid: a905c25047481344c814f6428e6b5583, type: 3}
   - {fileID: 4029650023332648184, guid: 67397ef42faf77c4ba3aa2179b530c19, type: 3}
+  - {fileID: 2912785467607653060, guid: f9e2b770ac9d28f4da9fe262e37d2ca9, type: 3}
   _enemySpawnTimer: 5
   _stopSpawning: 0
 --- !u!4 &231627419
