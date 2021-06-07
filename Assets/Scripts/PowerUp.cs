@@ -8,10 +8,11 @@ public class PowerUp : MonoBehaviour
     [SerializeField]
     private int _speed = 3;
 
-    [SerializeField] // 0 is triple shot, 1 is speed boost, 2 is shield
+    [SerializeField] // 0 is triple shot, 1 is speed boost, 2 is shield, 3 is ammo, 4 is life, 5 is Droneshot
     private int powerUpID;
 
     private Player _player;
+    private WeaponManager _weaponManager;
     private AudioSource __powerUpSFX;
 
 
@@ -22,6 +23,7 @@ public class PowerUp : MonoBehaviour
     void Start()
     {
         _player = GameObject.Find("Player").GetComponent<Player>();
+        _weaponManager = GameObject.Find("Weapon_Manager").GetComponent<WeaponManager>();
         __powerUpSFX = GameObject.Find("Power_Up_SFX").GetComponent<AudioSource>();
         if (_player == null)
         {
@@ -30,6 +32,10 @@ public class PowerUp : MonoBehaviour
         if (__powerUpSFX == null)
         {
             Debug.LogError("Power Up SFX is null");
+        }
+        if(_weaponManager == null)
+        {
+            Debug.LogError("Weapon Manager is Null");
         }
     }
 
@@ -51,7 +57,7 @@ public class PowerUp : MonoBehaviour
             switch (powerUpID)
             {
                 case 0:
-                    _player.TripleShotActive();
+                    _weaponManager.TripleShotActive();
                     break;
                 case 1:
                      _player.SpeedBoostActive();
@@ -60,10 +66,14 @@ public class PowerUp : MonoBehaviour
                      _player.ShieldActiveTrue();
                     break;
                 case 3:
-                    _player.AddAmmo();
+                    _weaponManager.AddAmmo();
                     break;
                 case 4:
                     _player.AddLife();
+                    break;
+                case 5:
+                    Debug.Log("Drone Shot Collected");
+                    _weaponManager.DroneShotActive();
                     break;
                 default:
                     Debug.Log("Invalid powerUpID");

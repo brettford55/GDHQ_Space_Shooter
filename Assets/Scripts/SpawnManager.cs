@@ -23,6 +23,40 @@ public class SpawnManager : MonoBehaviour
         StartCoroutine(SpawnPowerUpRoutine());
     }
 
+    private bool DetermineRarity(int powerUp)
+    {
+        float randx = Random.Range(0, 100f);
+        if (powerUp < 2)
+        {
+            return true;
+        }
+        else if(powerUp < 4)
+        {
+            if(randx <= 80)
+            {
+                return true;
+            }
+            else
+            {
+                Debug.Log(" Medium tier item did not get spawned");
+                return false;
+            }
+        }
+        else
+        {
+            if (randx <= 50)
+            {
+                return true;
+            }
+            else
+            {
+                Debug.Log("Rare item did not get spawned");
+                return false;
+            }
+        }
+
+    }
+
     IEnumerator SpawnRoutine(float waitTime)
     {
         yield return new WaitForSeconds(2);//spawn delay
@@ -36,6 +70,8 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
+
+
     IEnumerator SpawnPowerUpRoutine()
     {
         yield return new WaitForSeconds(5);//spawn delay
@@ -45,7 +81,13 @@ public class SpawnManager : MonoBehaviour
 
             float randx = Random.Range(-8f, 8f);
             int randomPowerUp = Random.Range(0,_powerUps.Length);
-            Instantiate(_powerUps[randomPowerUp], new Vector3(randx, 7, 0), Quaternion.identity);
+           
+            bool _isSpawning = DetermineRarity(randomPowerUp);
+            if(_isSpawning == true)
+            {
+                Instantiate(_powerUps[randomPowerUp], new Vector3(randx, 7, 0), Quaternion.identity);
+            }
+          
             yield return new WaitForSeconds(Random.Range(3, 8));
         }
      

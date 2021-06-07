@@ -7,12 +7,12 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     [SerializeField]
     private float _minSpeed = 3, _currentSpeed,_speedBoostMultiplyer, _acceleration, _maxSpeed;
-    [SerializeField]
-    private float _fireRate = 0.5f, _canFire;
+    //[SerializeField]
+   // private float _fireRate = 0.5f, _canFire;
     [SerializeField]
     private bool _tripleShotActive = false, _speedBoostActive = false, _shieldActive = false;
     [SerializeField]
-    private GameObject _laserPrefab, _tripleShotPrefab, _shieldVisualizer;
+    private GameObject /*_laserPrefab, _tripleShotPrefab,*/ _shieldVisualizer;
     [SerializeField]
     private GameObject _rightTailDmg, _leftTailDmg;
     [SerializeField]
@@ -62,49 +62,29 @@ public class Player : MonoBehaviour
         _currentSpeed = _minSpeed;
 
     }
-
     // Update is called once per frame
     void Update()
     {
         CalculateMovement();
 
-        ShootLaser(); //When Space is Pressed 
+        //ShootLaser(); //When Space is Pressed 
     }
-
     private void DamageVisualizer()
     {
         switch (_lives)
         {
+            case 3:
+                _rightTailDmg.SetActive(false);
+                break;
             case 2:
                 _rightTailDmg.SetActive(true);
+                _leftTailDmg.SetActive(false);
                 break;
             case 1:
                 _leftTailDmg.SetActive(true);
                 break;
         }
     }
-
-    void ShootLaser()
-    {
-        if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire && _ammo > 0)
-        {
-            _canFire = Time.time + _fireRate;
-            
-            if(_tripleShotActive == false)
-            {
-                Instantiate(_laserPrefab, transform.position + new Vector3(0, 0.9f, 0), Quaternion.identity);
-                _ammo -= 1;
-            }
-            else
-            {
-                Instantiate(_tripleShotPrefab, transform.position + new Vector3(0, 0.9f, 0), Quaternion.identity);
-                _ammo -= 3;
-            }
-            _UIManager.UpdateAmmo(_ammo);
-            _laserSFX.Play();
-        }
-    }
-
     private void CalculateMovement()
     {
         float horizontalInput = Input.GetAxis("Horizontal");
@@ -134,7 +114,6 @@ public class Player : MonoBehaviour
             transform.position = new Vector3(11.3f, transform.position.y, 0);
         }
     }
-
     private void CalculateCurrentSpeed()
     {
         StartCoroutine(AccelerationDelayRoutine());
@@ -158,28 +137,19 @@ public class Player : MonoBehaviour
             _currentSpeed = _minSpeed;
         }
     }
-
     IEnumerator AccelerationDelayRoutine()
     {
         yield return new WaitForSeconds(1f);
     }
-
-    public void AddAmmo()
-    {
-        _ammo += 3;
-        _UIManager.UpdateAmmo(_ammo);
-    }
-
     public void AddLife()
     {
         if(_lives < 3)
         {
              _lives += 1;
+            DamageVisualizer();
             _UIManager.UpdateLives(_lives);
         }
     }
-       
-
     public void LoseLife()
     {
        if(_shieldActive == true)
@@ -201,7 +171,6 @@ public class Player : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
-
     public void ShieldVisualizer()
     {
         switch (_shieldLives)
@@ -221,20 +190,11 @@ public class Player : MonoBehaviour
                 break;
         }
     }
-
     public void AddToScore(int points)
     {
         _score += points;
         _UIManager.UpdateScore(_score);
     }
-
-    public void TripleShotActive()
-    {
-        _tripleShotActive = true;
-        Debug.Log("Triple Shot is true");
-        StartCoroutine(TripleShotPowerDownRoutine());
-    }
-
     public void ShieldActiveTrue()
     {
         _shieldLives = 3;
@@ -242,26 +202,17 @@ public class Player : MonoBehaviour
         _shieldActive = true;
         _shieldVisualizer.SetActive(true);
     }
-
     public void SpeedBoostActive()
     {
         _speedBoostActive = true;
         Debug.Log("Speed Boost is true");
         StartCoroutine(SpeedBoostPowerDownRoutine());
     }
-
-    IEnumerator TripleShotPowerDownRoutine()
-    {
-        yield return new WaitForSeconds(5f);
-        _tripleShotActive = false;
-    }
-
     IEnumerator SpeedBoostPowerDownRoutine()
     {
         yield return new WaitForSeconds(5f);
        _speedBoostActive = false;
     }
-
     void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.tag == "Enemy Laser")
