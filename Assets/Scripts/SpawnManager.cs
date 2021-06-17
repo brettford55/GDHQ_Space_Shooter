@@ -23,7 +23,7 @@ public class SpawnManager : MonoBehaviour
         StartCoroutine(SpawnPowerUpRoutine());
     }
 
-    private bool DetermineRarity(int powerUp)
+    private bool DoesPowerUpSpawn(int powerUp)
     {
         float randx = Random.Range(0, 100f);
         if (powerUp < 2)
@@ -82,7 +82,7 @@ public class SpawnManager : MonoBehaviour
             float randx = Random.Range(-8f, 8f);
             int randomPowerUp = Random.Range(0,_powerUps.Length);
            
-            bool _isSpawning = DetermineRarity(randomPowerUp);
+            bool _isSpawning = DoesPowerUpSpawn(randomPowerUp);
             if(_isSpawning == true)
             {
                 Instantiate(_powerUps[randomPowerUp], new Vector3(randx, 7, 0), Quaternion.identity);

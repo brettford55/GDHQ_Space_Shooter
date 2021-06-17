@@ -6,19 +6,19 @@ public class Player : MonoBehaviour
 {
     // Start is called before the first frame update
     [SerializeField]
-    private float _minSpeed = 3, _currentSpeed,_speedBoostMultiplyer, _acceleration, _maxSpeed;
+    private float _minSpeed = 3, _currentSpeed, _speedBoostMultiplyer, _acceleration, _maxSpeed;
     //[SerializeField]
    // private float _fireRate = 0.5f, _canFire;
     [SerializeField]
-    private bool _tripleShotActive = false, _speedBoostActive = false, _shieldActive = false;
+    private bool _tripleShotActive = false, _speedBoostActive = false, _shieldActive = false, _thrusterActive = true;
     [SerializeField]
     private GameObject /*_laserPrefab, _tripleShotPrefab,*/ _shieldVisualizer;
     [SerializeField]
-    private GameObject _rightTailDmg, _leftTailDmg;
+    private GameObject _rightTailDmg, _leftTailDmg, _thruster;
     [SerializeField]
     private AudioSource _laserSFX;
     [SerializeField]
-    private int _score, _lives, _shieldLives, _ammo;
+    private int _score, _lives, _shieldLives;
 
     private SpawnManager _spawnManager;
     private UIManager _UIManager;
@@ -60,8 +60,11 @@ public class Player : MonoBehaviour
         }
 
         _currentSpeed = _minSpeed;
+        _thrusterActive = true;
 
+        _UIManager.SetThrusterSlider((int) _minSpeed, (int) _maxSpeed);
     }
+
     // Update is called once per frame
     void Update()
     {
@@ -90,7 +93,16 @@ public class Player : MonoBehaviour
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
 
-        CalculateCurrentSpeed();
+        if (_thrusterActive == false)
+        {
+            _currentSpeed = _minSpeed;
+        }
+        else
+        {
+            CalculateCurrentSpeed();
+        }
+
+        
         
         if(_speedBoostActive == true)
         {
@@ -117,25 +129,34 @@ public class Player : MonoBehaviour
     private void CalculateCurrentSpeed()
     {
         StartCoroutine(AccelerationDelayRoutine());
-        if (Input.GetKey(KeyCode.LeftShift) && _currentSpeed < _maxSpeed)
+        
+        if (Input.GetKey(KeyCode.LeftShift) && _currentSpeed <= _maxSpeed)
         {
             float newSpeed = _currentSpeed + _acceleration * Time.deltaTime;
             _currentSpeed = newSpeed;
+            _UIManager.UpdateThrusterBar(_currentSpeed);
+            _thruster.SetActive(true);
         }
-        else if (_currentSpeed > _minSpeed && Input.GetKey(KeyCode.LeftShift) == false)
+        else if (_currentSpeed >= _minSpeed && Input.GetKey(KeyCode.LeftShift) == false)
         {
             _currentSpeed -= _acceleration * Time.deltaTime;
+            _thruster.SetActive(false);
         }
         
         //set min and max because update method make _current speed slightly more or less than given min and max
         else if(Input.GetKey(KeyCode.LeftShift) && _currentSpeed > _maxSpeed) 
         {
-            _currentSpeed = _maxSpeed;
+            _currentSpeed = _minSpeed;
+            StartCoroutine(ThrusterCoolDownRoutine());
+            _thruster.SetActive(false);
+            return;
         }
         else if (Input.GetKey(KeyCode.LeftShift) == false && _currentSpeed < _minSpeed)
         {
             _currentSpeed = _minSpeed;
         }
+
+        _UIManager.UpdateThrusterBar(_currentSpeed);
     }
     IEnumerator AccelerationDelayRoutine()
     {
@@ -220,6 +241,18 @@ public class Player : MonoBehaviour
             LoseLife();
             Destroy(collision.gameObject);
         }
+    }
+
+    IEnumerator ThrusterCoolDownRoutine()
+    {
+        _thrusterActive = false;
+        for(float i = _maxSpeed; i >= _minSpeed; i -= .1f)
+        {
+            _UIManager.UpdateThrusterBar(i);
+            yield return new WaitForSeconds(.05f);
+        }
+        _thrusterActive = true;
+            
     }
 
 

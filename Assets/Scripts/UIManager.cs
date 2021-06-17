@@ -9,35 +9,40 @@ public class UIManager : MonoBehaviour
     // Start is called before the first frame update
     [SerializeField]
     private Text _scoreTXT, _ammoTXT;
-
     [SerializeField]
     private GameObject _gameOverTXT, _restartTXT;
-    
     [SerializeField]
     private Sprite[] _livesSprites;
-
     [SerializeField]
     private Image _livesImage;
-
+    private Slider _slider;
     private GameManager _gameManager;
-
-    
-    
-    
-    void Start()
+    void Awake()
     {
         _scoreTXT.text = "Score: 0";
         _ammoTXT.text = "Ammo: 15";
 
+        _slider = GameObject.Find("Thruster_UI").GetComponent<Slider>();
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
         if(_gameManager == null)
         {
             Debug.LogError("Game Manager is Null");
         }
+        if(_slider == null)
+        {
+            Debug.LogError("Slider is Null");
+        }  
     }
 
-    // Update is called once per frame
-   
+    public void UpdateThrusterBar(float thrusterUsed)
+    {
+        _slider.value = thrusterUsed;
+    }
+    public void SetThrusterSlider(int min, int max)
+    {
+        _slider.minValue = min;
+        _slider.maxValue = max;
+    }
 
     public void UpdateScore(int score)
     {
@@ -69,8 +74,6 @@ public class UIManager : MonoBehaviour
         _restartTXT.SetActive(true);
         _gameManager.GameOver();
     }
-
-   
 
     IEnumerator FlickerRoutine()
     {
