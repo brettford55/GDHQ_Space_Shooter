@@ -80,8 +80,6 @@ public class Enemy : MonoBehaviour
             transform.position = new Vector3(11.3f, transform.position.y, 0);
         }
     }
-  
-
     IEnumerator ShootLaserRoutine()
     {
         while (_isShooting)
@@ -91,12 +89,10 @@ public class Enemy : MonoBehaviour
             yield return new WaitForSeconds(waitTime);
         }
     }
-
     void NormalEnemy()
     {
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
     }
-
     void ZigzagEnemy(float r)
     {
         _zigzagDelay -= Time.deltaTime;
@@ -119,22 +115,14 @@ public class Enemy : MonoBehaviour
         }
         transform.Translate(direction * _speed * Time.deltaTime);
     }
-
     IEnumerator ZigzagRoutine()
     {
         while (true)
         {
             r = Random.Range(0, 90f);
             yield return new WaitForSeconds(1f);
-        }
-       
+        }  
     }
-
-  
-
-   
-
-
     private void OnTriggerEnter2D(Collider2D col)
     {
         
@@ -153,7 +141,6 @@ public class Enemy : MonoBehaviour
 
 
     }
-
     IEnumerator EnemyDestroyRoutine()
     {
         _destroyedAnim.SetTrigger("OnEnemyDeath");
