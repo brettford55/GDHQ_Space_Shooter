@@ -509,7 +509,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7777778, y: 1}
+    m_SensorSize: {x: 1.777528, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -665,8 +665,8 @@ MonoBehaviour:
   _enemySpawnTimer: 5
   _stopSpawning: 0
   _enemyType:
-  - Normal
-  - Zigzag
+  - {fileID: 2727830767644095106, guid: 561750ad9adf8894093f07fb020f3e42, type: 3}
+  - {fileID: 2727830767644095106, guid: ec8c1af626e2eca43a690da7d2b04730, type: 3}
 --- !u!4 &231627419
 Transform:
   m_ObjectHideFlags: 0
@@ -1197,7 +1197,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1089663846
 GameObject:
@@ -1342,7 +1342,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1177516236
 GameObject:
@@ -2571,7 +2571,7 @@ RectTransform:
   - {fileID: 1672207388}
   - {fileID: 10981717}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -2649,6 +2649,7 @@ MonoBehaviour:
   - {fileID: 9139061759114395813, guid: c62c9659d609bea4fbdaa1d10965ab71, type: 3}
   _ammo: 15
   _weaponID: 0
+  _maxAmmo: 15
   _fireRate: 0.5
   _canFire: 0.3
   _tripleShotCoolDown: 5
@@ -2874,7 +2875,7 @@ PrefabInstance:
     - target: {fileID: 1469316069946161125, guid: a50e3a3ef84243c4c8687a368443d34b,
         type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1469316069946161125, guid: a50e3a3ef84243c4c8687a368443d34b,
         type: 3}

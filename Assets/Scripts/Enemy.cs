@@ -5,15 +5,15 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [SerializeField]
-    private float _speed, _zigzagSpeed, _zigzagDelay, r;
+    private float _speed, _beamerSpeed, _zigzagSpeed, _zigzagDelay, r, _movementType;
 
     [SerializeField]
     private GameObject _laser;
 
     [SerializeField]
     private bool _isShooting = true;
-
-    string _enemyType;
+    [SerializeField]
+    private int _enemyID; // 0
 
     private AudioSource _explosionSFX;
 
@@ -24,6 +24,7 @@ public class Enemy : MonoBehaviour
     private Collider2D _enemyCollider;
 
     private SpawnManager _spawnManager;
+    bool dirRight = true;
     Vector3 direction = Vector3.down;
 
 
@@ -37,8 +38,6 @@ public class Enemy : MonoBehaviour
         _explosionSFX = GetComponent<AudioSource>();
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
         
-        StartCoroutine(ShootLaserRoutine());
-
         if (_player == null)
         {
             Debug.LogError("Player is null");
@@ -60,25 +59,26 @@ public class Enemy : MonoBehaviour
             Debug.LogError("Spawn mnager is Null");
         }
 
-        //Call assign enemy from SpawnManager
-        _enemyType = _spawnManager.AssignEnemyType();
-        if(_enemyType == "Zigzag") StartCoroutine(ZigzagRoutine());
+        _movementType = Random.Range(1f, 100f);
+        if (_enemyID == 0) StartCoroutine(ShootLaserRoutine());
+        else if (_enemyID == 1)
+        {
+            StartCoroutine(ShootBeamRoutine());
+            StartCoroutine(ZigzagRoutine());
+        }
+            
+
+        if (_movementType >= 51 && _enemyID == 0) StartCoroutine(ZigzagRoutine()); // zigzag enemy  
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (_enemyType == "Zigzag") ZigzagEnemy(r);
-        else NormalEnemy();
+        if (_movementType >= 51 && _enemyID == 0) ZigzagEnemy(r);
+        else if (_enemyID == 0) NormalEnemy();
+        else if (_enemyID == 1) BeamerEnemy();
 
-        if (transform.position.x > 11.3f)
-        {
-            transform.position = new Vector3(-11.3f, transform.position.y, 0);
-        }
-        else if (transform.position.x < -11.3f)
-        {
-            transform.position = new Vector3(11.3f, transform.position.y, 0);
-        }
+       
     }
     IEnumerator ShootLaserRoutine()
     {
@@ -89,9 +89,38 @@ public class Enemy : MonoBehaviour
             yield return new WaitForSeconds(waitTime);
         }
     }
+
+    IEnumerator ShootBeamRoutine()
+    {
+        while (_isShooting)
+        {
+            if(r < 50) Instantiate(_laser, transform.position + new Vector3(0, -1.3f, 0), Quaternion.identity);
+
+            yield return new WaitForSeconds(.15f);
+        }
+    }
     void NormalEnemy()
     {
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
+    }
+
+    void BeamerEnemy()
+    {
+        
+        if (dirRight)
+            transform.Translate(Vector3.right * _beamerSpeed * Time.deltaTime);
+        else
+            transform.Translate(Vector3.left * _beamerSpeed * Time.deltaTime);
+
+        if (transform.position.x >= 11f)
+        {
+            dirRight = false;
+        }
+
+        if (transform.position.x <= -11f)
+        {
+            dirRight = true;
+        }
     }
     void ZigzagEnemy(float r)
     {
@@ -114,12 +143,21 @@ public class Enemy : MonoBehaviour
             _zigzagDelay += 1;
         }
         transform.Translate(direction * _speed * Time.deltaTime);
+
+        if (transform.position.x > 11.3f)
+        {
+            transform.position = new Vector3(-11.3f, transform.position.y, 0);
+        }
+        else if (transform.position.x < -11.3f)
+        {
+            transform.position = new Vector3(11.3f, transform.position.y, 0);
+        }
     }
     IEnumerator ZigzagRoutine()
     {
         while (true)
         {
-            r = Random.Range(0, 90f);
+            r = Random.Range(0, 100f);
             yield return new WaitForSeconds(1f);
         }  
     }

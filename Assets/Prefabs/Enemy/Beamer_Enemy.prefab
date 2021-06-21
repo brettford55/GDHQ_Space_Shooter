@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 4421642883561300580}
   - component: {fileID: 5288450105988666615}
   m_Layer: 0
-  m_Name: Enemy
+  m_Name: Beamer_Enemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31,7 +31,7 @@ Transform:
   m_GameObject: {fileID: 2727830767644095106}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.75, y: 0.75, z: 0.75}
+  m_LocalScale: {x: 1.25, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -99,10 +99,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 2
+  _beamerSpeed: 4
   _zigzagSpeed: 0.57
   _zigzagDelay: 0
-  _laser: {fileID: 6687027715588415038, guid: e58b320193874674ca8cdd2a616f4b40, type: 3}
+  r: 0
+  _movementType: 0
+  _laser: {fileID: 6687027715588415038, guid: fc77996c1b21e4a4cbb41fb88c307a23, type: 3}
   _isShooting: 1
+  _enemyID: 1
 --- !u!50 &4422190585687326558
 Rigidbody2D:
   serializedVersion: 4

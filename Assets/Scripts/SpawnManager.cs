@@ -17,7 +17,7 @@ public class SpawnManager : MonoBehaviour
     private bool _stopSpawning = false;
 
     [SerializeField]
-    private string[] _enemyType;
+    private GameObject[] _enemyType; // 0 = Normal  1 == Beamer
 
 
     public void StartSpawning()
@@ -59,18 +59,11 @@ public class SpawnManager : MonoBehaviour
         }
 
     }
-
-    public string AssignEnemyType()
+    public int AssignEnemyType()
     {
-        float r = Random.Range(1f, 100f);
-        int i = 0; // normal enemy
-
-        if(r >= 51) // zigzag enemy
-        {
-            i = 1; // zigzag
-        }
-
-        return _enemyType[i];
+        float r = Random.Range(0f, 100f);
+        if (r <= 50) return 0;
+        else return 1;
     }
 
     IEnumerator SpawnRoutine(float waitTime)
@@ -80,8 +73,18 @@ public class SpawnManager : MonoBehaviour
         while (_stopSpawning == false)
         {
             float randx = Random.Range(-8f, 8f);
-            GameObject newEnemy = Instantiate(_enemyPrefab, new Vector3(randx, 11, 0), Quaternion.identity);
-            AssignEnemyType();
+            GameObject newEnemy = null;
+            int i = AssignEnemyType();
+            switch (i)
+            {
+                case 0:
+                    newEnemy = Instantiate(_enemyType[i], new Vector3(randx, 11, 0), Quaternion.identity);
+                    break;
+                case 1:
+                    if(randx < 0) newEnemy = Instantiate(_enemyType[i], new Vector3(11.3f, 2, 0), Quaternion.identity);
+                    else newEnemy = Instantiate(_enemyType[i], new Vector3(-11.3f, 2, 0), Quaternion.identity);
+                    break;
+            }
             newEnemy.transform.parent = _EnemyContainer.transform;
             yield return new WaitForSeconds(waitTime);
         }
