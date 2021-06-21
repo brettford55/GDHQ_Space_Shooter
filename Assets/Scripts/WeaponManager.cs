@@ -9,7 +9,7 @@ public class WeaponManager : MonoBehaviour
     private GameObject[] _weaponPrefabs; // 0 = laser, 1 = tripleshot, 2 = droneshot
 
     [SerializeField]
-    private int  _ammo = 15, _weaponID = 0;
+    private int  _ammo = 15, _weaponID = 0, _maxAmmo = 15;
 
     [SerializeField]
     private float _fireRate = 0.5f, _canFire;
@@ -55,14 +55,14 @@ public class WeaponManager : MonoBehaviour
         Instantiate(_weaponPrefabs[_weaponID], transform.position + new Vector3(0, 0.9f, 0), Quaternion.identity);
         _ammo -= _ammoUsed;
            
-        _UIManager.UpdateAmmo(_ammo);
+        _UIManager.UpdateAmmo(_ammo, _maxAmmo);
         _laserSFX.Play();   
     }
 
     public void AddAmmo()
     {
         _ammo += 3;
-        _UIManager.UpdateAmmo(_ammo);
+        _UIManager.UpdateAmmo(_ammo, _maxAmmo);
     }
 
     public void TripleShotActive()

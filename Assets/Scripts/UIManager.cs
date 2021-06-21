@@ -20,7 +20,7 @@ public class UIManager : MonoBehaviour
     void Awake()
     {
         _scoreTXT.text = "Score: 0";
-        _ammoTXT.text = "Ammo: 15";
+        _ammoTXT.text = "Ammo: 15/15";
 
         _slider = GameObject.Find("Thruster_UI").GetComponent<Slider>();
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
@@ -59,13 +59,13 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void UpdateAmmo(int ammo)
+    public void UpdateAmmo(int ammo, int maxAmmo)
     {
         if(ammo < 0)
         {
             ammo = 0;
         }
-        _ammoTXT.text = "Ammo: " + ammo.ToString();
+        _ammoTXT.text = "Ammo: " + ammo.ToString() + "/" + maxAmmo.ToString();
     }
 
     private void GameOverSequence()

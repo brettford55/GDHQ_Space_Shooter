@@ -101,9 +101,6 @@ public class Player : MonoBehaviour
         {
             CalculateCurrentSpeed();
         }
-
-        
-        
         if(_speedBoostActive == true)
         {
             transform.Translate(new Vector3(horizontalInput, verticalInput, 0) * Time.deltaTime * (_currentSpeed *_speedBoostMultiplyer)  );
