@@ -664,6 +664,9 @@ MonoBehaviour:
   - {fileID: 4303495164646021813, guid: a2c3ae49fd83e324e994373480bf388f, type: 3}
   _enemySpawnTimer: 5
   _stopSpawning: 0
+  _enemyType:
+  - Normal
+  - Zigzag
 --- !u!4 &231627419
 Transform:
   m_ObjectHideFlags: 0

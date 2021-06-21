@@ -99,6 +99,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 2
+  _zigzagSpeed: 0.57
+  _zigzagDelay: 0
   _laser: {fileID: 6687027715588415038, guid: e58b320193874674ca8cdd2a616f4b40, type: 3}
   _isShooting: 1
 --- !u!50 &4422190585687326558

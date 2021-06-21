@@ -16,6 +16,9 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     private bool _stopSpawning = false;
 
+    [SerializeField]
+    private string[] _enemyType;
+
 
     public void StartSpawning()
     {
@@ -57,6 +60,19 @@ public class SpawnManager : MonoBehaviour
 
     }
 
+    public string AssignEnemyType()
+    {
+        float r = Random.Range(1f, 100f);
+        int i = 0; // normal enemy
+
+        if(r >= 51) // zigzag enemy
+        {
+            i = 1; // zigzag
+        }
+
+        return _enemyType[i];
+    }
+
     IEnumerator SpawnRoutine(float waitTime)
     {
         yield return new WaitForSeconds(2);//spawn delay
@@ -65,6 +81,7 @@ public class SpawnManager : MonoBehaviour
         {
             float randx = Random.Range(-8f, 8f);
             GameObject newEnemy = Instantiate(_enemyPrefab, new Vector3(randx, 11, 0), Quaternion.identity);
+            AssignEnemyType();
             newEnemy.transform.parent = _EnemyContainer.transform;
             yield return new WaitForSeconds(waitTime);
         }

@@ -5,14 +5,16 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [SerializeField]
-    private float _speed;
+    private float _speed, _zigzagSpeed, _zigzagDelay, r;
 
     [SerializeField]
     private GameObject _laser;
 
     [SerializeField]
     private bool _isShooting = true;
-    
+
+    string _enemyType;
+
     private AudioSource _explosionSFX;
 
     private Player _player;
@@ -20,7 +22,11 @@ public class Enemy : MonoBehaviour
     private Animator _destroyedAnim;
 
     private Collider2D _enemyCollider;
-    
+
+    private SpawnManager _spawnManager;
+    Vector3 direction = Vector3.down;
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -29,7 +35,8 @@ public class Enemy : MonoBehaviour
         _destroyedAnim = GetComponent<Animator>();
         _enemyCollider = GetComponent<Collider2D>();
         _explosionSFX = GetComponent<AudioSource>();
-
+        _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
+        
         StartCoroutine(ShootLaserRoutine());
 
         if (_player == null)
@@ -48,15 +55,32 @@ public class Enemy : MonoBehaviour
         {
             Debug.LogError("Explosion SFX is null");
         }
+        if (_spawnManager == null)
+        {
+            Debug.LogError("Spawn mnager is Null");
+        }
 
+        //Call assign enemy from SpawnManager
+        _enemyType = _spawnManager.AssignEnemyType();
+        if(_enemyType == "Zigzag") StartCoroutine(ZigzagRoutine());
     }
 
     // Update is called once per frame
     void Update()
     {
-        EnemyMovement();
-        
+        if (_enemyType == "Zigzag") ZigzagEnemy(r);
+        else NormalEnemy();
+
+        if (transform.position.x > 11.3f)
+        {
+            transform.position = new Vector3(-11.3f, transform.position.y, 0);
+        }
+        else if (transform.position.x < -11.3f)
+        {
+            transform.position = new Vector3(11.3f, transform.position.y, 0);
+        }
     }
+  
 
     IEnumerator ShootLaserRoutine()
     {
@@ -68,15 +92,48 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    void EnemyMovement()
+    void NormalEnemy()
     {
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
-        float randx = Random.Range(-9, 10);
-        if (transform.position.y < -6)
-        {
-            transform.position = new Vector3(randx, 7, 0);
-        }
     }
+
+    void ZigzagEnemy(float r)
+    {
+        _zigzagDelay -= Time.deltaTime;
+        if (_zigzagDelay <= 0)
+        {
+            
+            if (r <= 30)
+            {
+                direction = Vector3.left;
+            }
+            else if (r >= 60)
+            {
+                direction = Vector3.down;
+            }
+            else
+            {
+                direction = Vector3.right;
+            }
+            _zigzagDelay += 1;
+        }
+        transform.Translate(direction * _speed * Time.deltaTime);
+    }
+
+    IEnumerator ZigzagRoutine()
+    {
+        while (true)
+        {
+            r = Random.Range(0, 90f);
+            yield return new WaitForSeconds(1f);
+        }
+       
+    }
+
+  
+
+   
+
 
     private void OnTriggerEnter2D(Collider2D col)
     {
