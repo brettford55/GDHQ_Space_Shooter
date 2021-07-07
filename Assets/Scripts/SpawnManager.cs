@@ -62,8 +62,9 @@ public class SpawnManager : MonoBehaviour
     public int AssignEnemyType()
     {
         float r = Random.Range(0f, 100f);
-        if (r <= 50) return 0;
-        else return 1;
+        if (r <= 33) return 0;
+        else if (r >= 66) return 1;
+        else return 2;
     }
 
     IEnumerator SpawnRoutine(float waitTime)
@@ -83,6 +84,9 @@ public class SpawnManager : MonoBehaviour
                 case 1:
                     if(randx < 0) newEnemy = Instantiate(_enemyType[i], new Vector3(11.3f, 2, 0), Quaternion.identity);
                     else newEnemy = Instantiate(_enemyType[i], new Vector3(-11.3f, 2, 0), Quaternion.identity);
+                    break;
+                case 2:
+                    newEnemy = Instantiate(_enemyType[i], new Vector3(randx, 11, 0), Quaternion.identity);
                     break;
             }
             newEnemy.transform.parent = _EnemyContainer.transform;

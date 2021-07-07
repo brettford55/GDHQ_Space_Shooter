@@ -11,7 +11,7 @@ public class Enemy : MonoBehaviour
     private GameObject _laser;
 
     [SerializeField]
-    private bool _isShooting = true;
+    private bool _isShooting = true, _canDodge = false;
     [SerializeField]
     private int _enemyID; // 0
 
@@ -22,6 +22,8 @@ public class Enemy : MonoBehaviour
     private Animator _destroyedAnim;
 
     private Collider2D _enemyCollider;
+
+    private Rigidbody2D _rb;
 
     private SpawnManager _spawnManager;
     bool dirRight = true;
@@ -36,6 +38,7 @@ public class Enemy : MonoBehaviour
         _destroyedAnim = GetComponent<Animator>();
         _enemyCollider = GetComponent<Collider2D>();
         _explosionSFX = GetComponent<AudioSource>();
+        _rb = GetComponent<Rigidbody2D>();
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
         
         if (_player == null)
@@ -58,6 +61,10 @@ public class Enemy : MonoBehaviour
         {
             Debug.LogError("Spawn mnager is Null");
         }
+        if(_rb == null)
+        {
+            Debug.LogError("RB is Null");
+        }
 
         _movementType = Random.Range(1f, 100f);
         if (_enemyID == 0) StartCoroutine(ShootLaserRoutine());
@@ -77,8 +84,11 @@ public class Enemy : MonoBehaviour
         if (_movementType >= 51 && _enemyID == 0) ZigzagEnemy(r);
         else if (_enemyID == 0) NormalEnemy();
         else if (_enemyID == 1) BeamerEnemy();
+    }
 
-       
+    private void FixedUpdate()
+    {
+        
     }
     IEnumerator ShootLaserRoutine()
     {
@@ -103,7 +113,6 @@ public class Enemy : MonoBehaviour
     {
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
     }
-
     void BeamerEnemy()
     {
         
@@ -153,6 +162,14 @@ public class Enemy : MonoBehaviour
             transform.position = new Vector3(11.3f, transform.position.y, 0);
         }
     }
+
+    public void Dodge()
+    {
+        
+        _rb.AddForce(transform.right * 8 * Random.Range(-1,2), ForceMode2D.Impulse);
+    }
+   
+   
     IEnumerator ZigzagRoutine()
     {
         while (true)
@@ -188,5 +205,7 @@ public class Enemy : MonoBehaviour
         yield return new WaitForSeconds(3);
         Destroy(this.gameObject);
     }
+
+    
 }
 
