@@ -226,6 +226,11 @@ public class Player : MonoBehaviour
         Debug.Log("Speed Boost is true");
         StartCoroutine(SpeedBoostPowerDownRoutine());
     }
+
+    public float GetPlayerYPos()
+    {
+        return transform.position.y;
+    }
     IEnumerator SpeedBoostPowerDownRoutine()
     {
         yield return new WaitForSeconds(5f);
@@ -248,8 +253,7 @@ public class Player : MonoBehaviour
             _UIManager.UpdateThrusterBar(i);
             yield return new WaitForSeconds(.05f);
         }
-        _thrusterActive = true;
-            
+        _thrusterActive = true;       
     }
 
 

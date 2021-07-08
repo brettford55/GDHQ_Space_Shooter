@@ -11,7 +11,7 @@ public class Enemy : MonoBehaviour
     private GameObject _laser;
 
     [SerializeField]
-    private bool _isShooting = true, _canDodge = false;
+    private bool _isShooting = true, _canDodge = false, _isSmart = false , _shootingBackward = false;
     [SerializeField]
     private int _enemyID; // 0
 
@@ -104,7 +104,9 @@ public class Enemy : MonoBehaviour
     {
         while (_isShooting)
         {
-            if(r < 50) Instantiate(_laser, transform.position + new Vector3(0, -1.3f, 0), Quaternion.identity);
+            if(r < 50 && ) Instantiate(_laser, transform.position + new Vector3(0, -1.3f, 0), Quaternion.identity);
+
+            else if (r < 50) Instantiate(_laser, transform.position + new Vector3(0, -1.3f, 0), Quaternion.identity);
 
             yield return new WaitForSeconds(.15f);
         }
@@ -112,6 +114,15 @@ public class Enemy : MonoBehaviour
     void NormalEnemy()
     {
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
+    }
+
+    void SmartEnemy()
+    {
+        float playerYPos = _player.GetPlayerYPos();
+        if (playerYPos >= transform.position.y) 
+        { 
+
+        }
     }
     void BeamerEnemy()
     {
@@ -136,7 +147,6 @@ public class Enemy : MonoBehaviour
         _zigzagDelay -= Time.deltaTime;
         if (_zigzagDelay <= 0)
         {
-            
             if (r <= 30)
             {
                 direction = Vector3.left;
@@ -165,7 +175,6 @@ public class Enemy : MonoBehaviour
 
     public void Dodge()
     {
-        
         _rb.AddForce(transform.right * 8 * Random.Range(-1,2), ForceMode2D.Impulse);
     }
    
