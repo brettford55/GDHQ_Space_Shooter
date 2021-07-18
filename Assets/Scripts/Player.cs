@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     //[SerializeField]
    // private float _fireRate = 0.5f, _canFire;
     [SerializeField]
-    private bool _tripleShotActive = false, _speedBoostActive = false, _shieldActive = false, _thrusterActive = true;
+    private bool _tripleShotActive = false, _speedBoostActive = false, _shieldActive = false, _thrusterActive = true, _isFrozen = false;
     [SerializeField]
     private GameObject /*_laserPrefab, _tripleShotPrefab,*/ _shieldVisualizer;
     [SerializeField]
@@ -24,6 +24,7 @@ public class Player : MonoBehaviour
     private UIManager _UIManager;
     private SpriteRenderer _shieldRenderer;
     private CameraShake _cameraShake;
+    private SpriteRenderer _spriteRenderer;
 
     void Start()
     {
@@ -38,6 +39,11 @@ public class Player : MonoBehaviour
         if (_UIManager == null)
         {
             Debug.LogError("UIManager is Null");
+        }
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+        if (_spriteRenderer == null)
+        {
+            Debug.LogError("SpriteRenderer is Null");
         }
 
         _cameraShake = GameObject.Find("CM vcam1").GetComponent<CameraShake>();
@@ -90,37 +96,40 @@ public class Player : MonoBehaviour
     }
     private void CalculateMovement()
     {
-        float horizontalInput = Input.GetAxis("Horizontal");
-        float verticalInput = Input.GetAxis("Vertical");
+        if (_isFrozen == false)
+        {
+            float horizontalInput = Input.GetAxis("Horizontal");
+            float verticalInput = Input.GetAxis("Vertical");
 
-        if (_thrusterActive == false)
-        {
-            _currentSpeed = _minSpeed;
-        }
-        else
-        {
-            CalculateCurrentSpeed();
-        }
-        if(_speedBoostActive == true)
-        {
-            transform.Translate(new Vector3(horizontalInput, verticalInput, 0) * Time.deltaTime * (_currentSpeed *_speedBoostMultiplyer)  );
-        }
-        else
-        {
-            transform.Translate(new Vector3(horizontalInput, verticalInput, 0) * Time.deltaTime * _currentSpeed);
-        }
-        
-        //y bounds
-        transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -3.8f, 0), 0);
-        
-        if (transform.position.x > 11.3f)
-        {
-            transform.position = new Vector3(-11.3f, transform.position.y, 0);
-        }
+            if (_thrusterActive == false)
+            {
+                _currentSpeed = _minSpeed;
+            }
+            else
+            {
+                CalculateCurrentSpeed();
+            }
+            if (_speedBoostActive == true)
+            {
+                transform.Translate(new Vector3(horizontalInput, verticalInput, 0) * Time.deltaTime * (_currentSpeed * _speedBoostMultiplyer));
+            }
+            else
+            {
+                transform.Translate(new Vector3(horizontalInput, verticalInput, 0) * Time.deltaTime * _currentSpeed);
+            }
 
-        else if (transform.position.x < -11.3f)
-        {
-            transform.position = new Vector3(11.3f, transform.position.y, 0);
+            //y bounds
+            transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -3.8f, 0), 0);
+
+            if (transform.position.x > 11.3f)
+            {
+                transform.position = new Vector3(-11.3f, transform.position.y, 0);
+            }
+
+            else if (transform.position.x < -11.3f)
+            {
+                transform.position = new Vector3(11.3f, transform.position.y, 0);
+            }
         }
     }
     private void CalculateCurrentSpeed()
@@ -158,6 +167,11 @@ public class Player : MonoBehaviour
     IEnumerator AccelerationDelayRoutine()
     {
         yield return new WaitForSeconds(1f);
+    }
+
+    public void Freeze()
+    {
+        StartCoroutine(FreezeRoutine());
     }
     public void AddLife()
     {
@@ -235,6 +249,16 @@ public class Player : MonoBehaviour
     {
         yield return new WaitForSeconds(5f);
        _speedBoostActive = false;
+    }
+
+    IEnumerator FreezeRoutine()
+    {
+        _isFrozen = true;
+        _spriteRenderer.color = Color.blue;
+        yield return new WaitForSeconds(3f);
+        _spriteRenderer.color = Color.white;
+        _isFrozen = false;
+        
     }
     void OnTriggerEnter2D(Collider2D collision)
     {

@@ -75,11 +75,14 @@ public class PowerUp : MonoBehaviour
                     Debug.Log("Drone Shot Collected");
                     _weaponManager.DroneShotActive();
                     break;
+                case 6:
+                    _player.Freeze();
+                    break;
                 default:
                     Debug.Log("Invalid powerUpID");
                     break;
             }
-            __powerUpSFX.Play();
+            if(powerUpID != 6) __powerUpSFX.Play();
              Destroy(this.gameObject);
         }
 

@@ -29,7 +29,7 @@ public class SpawnManager : MonoBehaviour
     private bool DoesPowerUpSpawn(int powerUp)
     {
         float randx = Random.Range(0, 100f);
-        if (powerUp < 2)
+        if (powerUp < 2 || powerUp == 6)
         {
             return true;
         }
