@@ -79,9 +79,13 @@ public class PowerUp : MonoBehaviour
                     Debug.Log("Invalid powerUpID");
                     break;
             }
-            
             __powerUpSFX.Play();
              Destroy(this.gameObject);
+        }
+
+        if (collision.tag == "Enemy Laser")
+        {
+            Destroy(this.gameObject);
         }
 
     }
