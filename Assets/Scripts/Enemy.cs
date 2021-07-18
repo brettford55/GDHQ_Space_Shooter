@@ -8,7 +8,7 @@ public class Enemy : MonoBehaviour
     private float _speed, _beamerSpeed, _zigzagSpeed, _zigzagDelay, r, _movementType;
 
     [SerializeField]
-    private GameObject _laser;
+    private GameObject _laser, _smartLaser;
 
     [SerializeField]
     private bool _isShooting = true, _canDodge = false, _isSmart = false , _shootingBackward = false;
@@ -20,6 +20,7 @@ public class Enemy : MonoBehaviour
     private Player _player;
 
     private Animator _destroyedAnim;
+
 
     private Collider2D _enemyCollider;
 
@@ -67,7 +68,7 @@ public class Enemy : MonoBehaviour
         }
 
         _movementType = Random.Range(1f, 100f);
-        if (_enemyID == 0) StartCoroutine(ShootLaserRoutine());
+        if (_enemyID == 0 || _enemyID == 2) StartCoroutine(ShootLaserRoutine());
         else if (_enemyID == 1)
         {
             StartCoroutine(ShootBeamRoutine());
@@ -84,18 +85,16 @@ public class Enemy : MonoBehaviour
         if (_movementType >= 51 && _enemyID == 0) ZigzagEnemy(r);
         else if (_enemyID == 0) NormalEnemy();
         else if (_enemyID == 1) BeamerEnemy();
+        else if (_enemyID == 2) SmartEnemy();
     }
 
-    private void FixedUpdate()
-    {
-        
-    }
     IEnumerator ShootLaserRoutine()
     {
         while (_isShooting)
         {
             float waitTime = Random.Range(3, 8);
-            Instantiate(_laser, transform.position + new Vector3(0, -1.3f, 0), Quaternion.identity);
+            if(_shootingBackward == false) Instantiate(_laser, transform.position + new Vector3(0, -1.3f, 0), Quaternion.identity);
+            else Instantiate(_smartLaser, transform.position + new Vector3(0, 1.3f, 0), Quaternion.identity);
             yield return new WaitForSeconds(waitTime);
         }
     }
@@ -104,10 +103,7 @@ public class Enemy : MonoBehaviour
     {
         while (_isShooting)
         {
-            if(r < 50 && ) Instantiate(_laser, transform.position + new Vector3(0, -1.3f, 0), Quaternion.identity);
-
-            else if (r < 50) Instantiate(_laser, transform.position + new Vector3(0, -1.3f, 0), Quaternion.identity);
-
+            if (r < 50) Instantiate(_laser, transform.position + new Vector3(0, -1.3f, 0), Quaternion.identity);
             yield return new WaitForSeconds(.15f);
         }
     }
@@ -120,9 +116,10 @@ public class Enemy : MonoBehaviour
     {
         float playerYPos = _player.GetPlayerYPos();
         if (playerYPos >= transform.position.y) 
-        { 
-
+        {
+            _shootingBackward = true;
         }
+        NormalEnemy();
     }
     void BeamerEnemy()
     {

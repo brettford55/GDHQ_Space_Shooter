@@ -46,8 +46,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -1.3594332, y: -0.56220186}
-  m_Size: {x: 6.4185686, y: 6.4185686}
+  m_Offset: {x: 0.011601767, y: -0.56220186}
+  m_Size: {x: 2.4109287, y: 6.418569}
   m_Direction: 0
 --- !u!50 &598251129
 Rigidbody2D:
@@ -161,7 +161,7 @@ SpriteRenderer:
   m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 3154912113cbb4a498df6f571c74e18c, type: 3}
-  m_Color: {r: 0.06808474, g: 0.8490566, b: 0.1836615, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -185,13 +185,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speed: 2
   _beamerSpeed: 0
-  _zigzagSpeed: 0.57
+  _zigzagSpeed: 0
   _zigzagDelay: 0
   r: 0
   _movementType: 0
   _laser: {fileID: 6687027715588415038, guid: fc77996c1b21e4a4cbb41fb88c307a23, type: 3}
   _isShooting: 1
   _canDodge: 1
+  _isSmart: 0
+  _shootingBackward: 0
   _enemyID: 0
 --- !u!50 &4422190585687326558
 Rigidbody2D:

@@ -105,7 +105,11 @@ MonoBehaviour:
   r: 0
   _movementType: 0
   _laser: {fileID: 6687027715588415038, guid: fc77996c1b21e4a4cbb41fb88c307a23, type: 3}
+  _smartLaser: {fileID: 0}
   _isShooting: 1
+  _canDodge: 0
+  _isSmart: 1
+  _shootingBackward: 0
   _enemyID: 1
 --- !u!50 &4422190585687326558
 Rigidbody2D:

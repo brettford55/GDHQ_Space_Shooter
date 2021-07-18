@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 4421642883561300580}
   - component: {fileID: 5288450105988666615}
   m_Layer: 0
-  m_Name: Enemy
+  m_Name: Smart_Enemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 3154912113cbb4a498df6f571c74e18c, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.4568131, g: 0.7924528, b: 0.37753648, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -111,7 +111,7 @@ MonoBehaviour:
   _canDodge: 0
   _isSmart: 0
   _shootingBackward: 0
-  _enemyID: 0
+  _enemyID: 2
 --- !u!50 &4422190585687326558
 Rigidbody2D:
   serializedVersion: 4

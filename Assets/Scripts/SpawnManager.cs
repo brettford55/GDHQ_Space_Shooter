@@ -17,7 +17,7 @@ public class SpawnManager : MonoBehaviour
     private bool _stopSpawning = false;
 
     [SerializeField]
-    private GameObject[] _enemyType; // 0 = Normal  1 == Beamer
+    private GameObject[] _enemyType; // 0 = Normal  1 == Beamer 2 Dodge, 3 Smart
 
 
     public void StartSpawning()
@@ -61,10 +61,8 @@ public class SpawnManager : MonoBehaviour
     }
     public int AssignEnemyType()
     {
-        float r = Random.Range(0f, 100f);
-        if (r <= 33) return 0;
-        else if (r >= 66) return 1;
-        else return 2;
+        int r = (int)Random.Range(0, _enemyType.Length);
+        return r;
     }
 
     IEnumerator SpawnRoutine(float waitTime)
@@ -78,7 +76,7 @@ public class SpawnManager : MonoBehaviour
             int i = AssignEnemyType();
             switch (i)
             {
-                case 0:
+                case 0: 
                     newEnemy = Instantiate(_enemyType[i], new Vector3(randx, 11, 0), Quaternion.identity);
                     break;
                 case 1:
@@ -88,13 +86,18 @@ public class SpawnManager : MonoBehaviour
                 case 2:
                     newEnemy = Instantiate(_enemyType[i], new Vector3(randx, 11, 0), Quaternion.identity);
                     break;
+                case 3:
+                    Debug.Log("Smart enemy spawned");
+                    newEnemy = Instantiate(_enemyType[i], new Vector3(randx, 11, 0), Quaternion.identity);
+                    break;
+                default:
+                    Debug.LogError("No Enemy spawned");
+                    break;
             }
             newEnemy.transform.parent = _EnemyContainer.transform;
             yield return new WaitForSeconds(waitTime);
         }
     }
-
-
 
     IEnumerator SpawnPowerUpRoutine()
     {
