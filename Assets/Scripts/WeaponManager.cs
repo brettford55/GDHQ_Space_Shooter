@@ -61,7 +61,12 @@ public class WeaponManager : MonoBehaviour
 
     public void AddAmmo()
     {
+        
         _ammo += 3;
+        if(_ammo > _maxAmmo)
+        {
+            _ammo = _maxAmmo;
+        }
         _UIManager.UpdateAmmo(_ammo, _maxAmmo);
     }
 

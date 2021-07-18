@@ -90,6 +90,9 @@ public class SpawnManager : MonoBehaviour
                     Debug.Log("Smart enemy spawned");
                     newEnemy = Instantiate(_enemyType[i], new Vector3(randx, 11, 0), Quaternion.identity);
                     break;
+                case 4:
+                    newEnemy = Instantiate(_enemyType[i], new Vector3(randx, 11, 0), Quaternion.identity);
+                    break;
                 default:
                     Debug.LogError("No Enemy spawned");
                     break;

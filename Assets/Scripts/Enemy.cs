@@ -8,10 +8,10 @@ public class Enemy : MonoBehaviour
     private float _speed, _beamerSpeed, _zigzagSpeed, _zigzagDelay, r, _movementType;
 
     [SerializeField]
-    private GameObject _laser, _smartLaser;
+    private GameObject _laser, _smartLaser, _shieldVisualizer;
 
     [SerializeField]
-    private bool _isShooting = true, _canDodge = false, _isSmart = false , _shootingBackward = false;
+    private bool _isShooting = true, _canDodge = false, _isSmart = false , _shootingBackward = false, _hasshield = false;
     [SerializeField]
     private int _enemyID; // 0
 
@@ -67,6 +67,13 @@ public class Enemy : MonoBehaviour
             Debug.LogError("RB is Null");
         }
 
+        if(_shieldVisualizer == null)
+        {
+            _hasshield = false;
+        }
+
+        
+
         _movementType = Random.Range(1f, 100f);
         if (_enemyID == 0 || _enemyID == 2) StartCoroutine(ShootLaserRoutine());
         else if (_enemyID == 1)
@@ -83,7 +90,7 @@ public class Enemy : MonoBehaviour
     void Update()
     {
         if (_movementType >= 51 && _enemyID == 0) ZigzagEnemy(r);
-        else if (_enemyID == 0) NormalEnemy();
+        else if (_enemyID == 0 || _enemyID == 3) NormalEnemy();
         else if (_enemyID == 1) BeamerEnemy();
         else if (_enemyID == 2) SmartEnemy();
     }
@@ -189,18 +196,44 @@ public class Enemy : MonoBehaviour
         
         if (col.tag == "Player")
         {
-            _player.LoseLife();
-            StartCoroutine(EnemyDestroyRoutine());
-            
+            if (_hasshield == true)
+            {
+                StartCoroutine(ShieldDestroyedRoutine());
+                _player.LoseLife();
+            }
+            else
+            {
+                StartCoroutine(EnemyDestroyRoutine());
+                _player.LoseLife();
+            }
+
+
         }
         else if (col.tag == "Laser")
         {
-            _player.AddToScore(10);
-            Destroy(col.gameObject);
-            StartCoroutine(EnemyDestroyRoutine());
+            if (_hasshield == true)
+            {
+                Destroy(col.gameObject);
+                _shieldVisualizer.SetActive(false);
+                _hasshield = false;
+            }
+            else
+            {
+                _player.AddToScore(10);
+                Destroy(col.gameObject);
+                StartCoroutine(EnemyDestroyRoutine());
+            } 
         }
+    }
 
 
+    IEnumerator ShieldDestroyedRoutine() //without this, the player will lose two lives immediatley when they hit shield
+    {
+        _enemyCollider.enabled = false;
+        _shieldVisualizer.SetActive(false);
+        _hasshield = false;
+        yield return new WaitForSeconds(1);
+        _enemyCollider.enabled = true;
     }
     IEnumerator EnemyDestroyRoutine()
     {
